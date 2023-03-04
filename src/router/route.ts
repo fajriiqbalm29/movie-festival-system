@@ -12,9 +12,14 @@ const routes:Array<RouteRecordRaw>  = [
         component: () => import('../views/Login.vue'),
     },
     {
-        path: '/dashboard',
+        path: '/admin/dashboard',
         meta: { title: 'Home', layout: 'dashboard', isPublic : false },
         component: () => import('../views/dashboard/index.vue'),
+    },
+    {
+        path: '/admin/movie',
+        meta: { title: 'Home', layout: 'dashboard', isPublic : false },
+        component: () => import('../views/dashboard/movie/index.vue'),
     },
 ]
 const router = createRouter({

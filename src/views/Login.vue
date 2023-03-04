@@ -66,11 +66,13 @@ export default ({
          async signin() {
             this.isSubmitted = true
             await login(this.formLogin).then((resp: Model.User.LoginData)=>{
-                console.log(resp);
-                
-                localStorage.setItem('user_session', JSON.stringify(resp));
+                 localStorage.setItem('user_session', JSON.stringify(resp));
                 localStorage.setItem('access_token', resp.access_token);
-                this.$router.push('/')
+                if(resp.role === 'admin'){
+                    this.$router.push('/admin/dashboard')
+                }else{
+                    this.$router.push('/')
+                }
             }).catch((err: Error)=>{
                 console.log(err.message);
             }).finally(()=> this.isSubmitted = false)

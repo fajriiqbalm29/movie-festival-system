@@ -1,24 +1,21 @@
 import {App} from "vue"
 export default {
     install: (app: App, options: any) => {
-        const isLoggedin:any = JSON.parse(localStorage.getItem('user_session'))
-        const user: any = JSON.parse(localStorage.getItem('user_profile'))
+        const user:any = JSON.parse(localStorage.getItem('user_session'))
 
         function getAuthData(){
-                if (isLoggedin && isLoggedin.access_token) return user
+                if (user && user.access_token) return user
 
                 else return null
         }
 
         function getRoles(){
-            if (isLoggedin && isLoggedin.access_token) return {
-                    id: isLoggedin.ref_user_type_id,
-                    name: isLoggedin.ref_user_type_name
+            if (user && user.access_token) return {
+                    role: user.role,
             }
 
             else return {
-                id: null,
-                name:null
+                role: null
             }
         }
 
@@ -30,7 +27,7 @@ export default {
         app.mixin({
             data(){
                 return {
-                    isLoggedIn: isLoggedin ? true : false,
+                    isLoggedIn: user ? true : false,
                     authData: getAuthData(),
                     authRole: getRoles(),
                 }

@@ -14,10 +14,9 @@ makeServer()
 
 const app = createApp(App)
 registerLayouts(app);
-
+app.use(Auth)
 app.use(VueAxios, axios)
 app.use(router)
-app.use(Auth)
 app.component('BaseButton', BaseButton)
 app.use(createPinia())
 app.provide('axios', app.config.globalProperties.axios) // provide 'axios'
