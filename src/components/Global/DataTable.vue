@@ -9,8 +9,9 @@
                                 <template v-for="(header, index) in headers" :key="index">
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        {{ header }}
+                                        {{ header.text }}
                                     </th>
+                                     <th v-if="actionsHeader">{{ actionsHeader }}</th>
                                 </template>
                             </tr>
                         </thead>
@@ -19,6 +20,11 @@
                                 <template v-for="(value, key) in item">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900" v-if="key !== 'id'">{{ value }}</div>
+                                    </td>
+                                    <td v-if="actionsHeader">
+                                        <button v-for="(action, index) in actions" :key="index" @click="action.handler(item)">
+                                        {{ action.label }}
+                                        </button>
                                     </td>
                                 </template>
                             </tr>
@@ -47,36 +53,53 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
+interface Item {
+    [key: string]: string | number;
+}
 
-interface DataTableItem {
-    id: number
-    [key: string]: string | number
+interface Header {
+    text: string;
+    value: string;
 }
 
 export default defineComponent({
     name: 'DataTable',
     props: {
         headers: {
-            type: Array,
-            required: true,
+            type: Array as PropType<Header[]>,
+            required: true
         },
         items: {
-            type: Array,
-            required: true,
+            type: Array as PropType<Item[]>,
+            required: true
         },
         itemsPerPage: {
             type: Number,
             default: 10,
+        },
+        actionsHeader: {
+            type: String,
+            default: '',
+        },
+        actions: {
+            type: Array,
+            default: () => [],
         },
     },
     setup(props) {
         const currentPage = ref(1)
 
         const displayedItems = computed(() => {
-            const startIndex = (currentPage.value - 1) * props.itemsPerPage
-            const endIndex = startIndex + props.itemsPerPage
-            return props.items.slice(startIndex, endIndex)
-        })
+            const start = (currentPage.value - 1) * props.itemsPerPage;
+            const end = start + props.itemsPerPage;
+            return props.items.slice(start, end).map((item: Item) => {
+                const transformedItem: any = {};
+                for (const header of props.headers) {
+                    transformedItem[header.text] = item[header.value];
+                }
+                return transformedItem;
+            });
+        });
 
         const totalPages = computed(() => {
             return Math.ceil(props.items.length / props.itemsPerPage)

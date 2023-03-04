@@ -102,30 +102,48 @@ export default defineComponent({
                 url: '',
             },
             movies: [],
-            headers: ['Title', 'Artist', 'Genre', 'Description'],
-            items: []
+            headers: [
+                {text: 'Title', value: 'title'},
+                 {text:'Artist', value:'artist'},
+                 {text: 'Genre', value:'genre'}, 
+                 {text:'Description',value:'description'}
+                ],
+            actions: [
+                {
+                    label: 'Edit',
+                    handler: (item: any) => {
+                        console.log(`Editing ${item.name}...`);
+                    },
+                },
+                {
+                    label: 'Delete',
+                    handler: (item: any) => {
+                        console.log(`Deleting ${item.name}...`);
+                    },
+                },
+            ],
         }
     },
-    mounted(){
+    mounted() {
         this.fetchMovieData()
     },
-    methods:{
-        async fetchMovieData(){
-            await movieHelper.getMovies().then((resp: any)=>{
+    methods: {
+        async fetchMovieData() {
+            await movieHelper.getMovies().then((resp: any) => {
                 console.log(resp.movies);
-                
+
                 this.movies = resp.movies
             })
         },
-        async postMovieData(){
+        async postMovieData() {
             this.isSubmitted = true
             this.formMovie.slug = this.formMovie.title.toLowerCase().replace(/\W+/g, '-')
-            await movieHelper.postMovie(this.formMovie).then((resp)=>{
+            await movieHelper.postMovie(this.formMovie).then((resp) => {
                 this.fetchMovieData()
                 this.modalOpen = false
-            }).catch((err: Error)=>{
+            }).catch((err: Error) => {
                 console.log(err);
-            }).finally(()=> this.isSubmitted = false)
+            }).finally(() => this.isSubmitted = false)
         }
     }
 })
