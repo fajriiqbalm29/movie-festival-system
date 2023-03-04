@@ -16,27 +16,28 @@
                         the better insight for your life
                     </p>
                 </div>
-                <form class="w-[370px]">
+                <form class="w-[370px]" @submit.prevent>
                     <div class="flex flex-col gap-6">
                         <div>
                             <label class="text-base block mb-2">Email Address</label>
-                            <input type="email" name="email"
+                            <input type="email" name="email" v-model="formLogin.email"
                                 class="rounded-2xl bg-form-bg py-[13px] px-7 w-full focus:outline-alerange focus:outline-none"
                                 placeholder="Email Address" />
                         </div>
                         <div>
                             <label class="text-base block mb-2">Password</label>
-                            <input type="password" name="password"
+                            <input type="password" name="password" v-model="formLogin.password"
                                 class="rounded-2xl bg-form-bg py-[13px] px-7 w-full focus:outline-alerange focus:outline-none"
                                 placeholder="Password" />
                         </div>
                     </div>
                     <div class="grid space-y-[14px] mt-[30px]">
-                        <a href="/" class="rounded-2xl bg-alerange py-[13px] text-center">
-                            <span class="text-base font-semibold">
-                                Login
-                            </span>
-                        </a>
+                        <BaseButton @click="signin" :loading="isSubmitted" :type="'submit'"
+                            :class="'rounded-2xl bg-alerange py-[13px] text-center'">
+                             <span class="text-base font-semibold">
+                                    Login
+                                </span>
+                        </BaseButton>
                         <a href="sign_up.html" class="rounded-2xl border border-white py-[13px] text-center">
                             <span class="text-base text-white">
                                 Create New Account
@@ -49,6 +50,32 @@
     </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts">
+import { login } from "@/helper/API/user"
+export default ({
+    data(){
+        return {
+            formLogin : {
+                email: "",
+                password: ""
+            },
+            isSubmitted : false
+        }
+    },
+    methods:{
+         async signin() {
+            this.isSubmitted = true
+            await login(this.formLogin).then((resp: Model.User.LoginData)=>{
+                console.log(resp);
+                
+                localStorage.setItem('user_session', JSON.stringify(resp));
+                localStorage.setItem('access_token', resp.access_token);
+                this.$router.push('/')
+            }).catch((err: Error)=>{
+                console.log(err.message);
+            }).finally(()=> this.isSubmitted = false)
+        },
+    }
+})
 </script>
 

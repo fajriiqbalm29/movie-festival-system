@@ -122,6 +122,23 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import Items from "../components/Items.vue";
+<script lang="ts">
+import * as userHelper from "@/helper/api/user"
+export default ({
+  data() {
+    return {
+      dropDownOpen: false
+    }
+  },
+  mounted(){
+    this.getUsers()
+  },
+  methods:{
+    async getUsers(){
+      await userHelper.getUsers().then((resp)=>{
+        
+      })
+    }
+  }
+})
 </script>
