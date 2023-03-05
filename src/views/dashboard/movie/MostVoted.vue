@@ -99,7 +99,7 @@ export default defineComponent({
                 { text: 'Artist', value: 'artist' },
                 { text: 'Genre', value: 'genre' },
                 { text: 'Description', value: 'description' },
-                { text: 'Views', value: 'views' }
+                { text: 'Votes', value: 'votes' }
             ],
             actions: [
                 {
@@ -123,13 +123,13 @@ export default defineComponent({
     methods: {
         async fetchMovieData() {
             await movieHelper.getMovies().then((resp: any) => {
-                this.movies = resp.movies.sort((a, b) => parseFloat(b.views) - parseFloat(a.views));
+                this.movies = resp.movies.sort((a, b) => parseFloat(b.votes) - parseFloat(a.votes));
             })
         },
         async postMovieData() {
             this.isSubmitted = true
             this.formMovie.slug = this.formMovie.title.toLowerCase().replace(/\W+/g, '-')
-            await movieHelper.postMovie(this.formMovie).then((resp:any) => {
+            await movieHelper.postMovie(this.formMovie).then((resp: any) => {
                 this.fetchMovieData()
                 this.modalOpen = false
             }).catch((err: Error) => {

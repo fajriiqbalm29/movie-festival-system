@@ -22,6 +22,11 @@ const routes:Array<RouteRecordRaw>  = [
         component: () => import('@/views/dashboard/movie/MostViewed.vue'),
     },
     {
+        path: '/admin/most-voted',
+        meta: { title: 'Most Voted', layout: 'dashboard', isPublic : false },
+        component: () => import('@/views/dashboard/movie/MostVoted.vue'),
+    },
+    {
         path: '/admin/movie',
         meta: { title: 'Home', layout: 'dashboard', isPublic : false },
         component: () => import('@/views/dashboard/movie/index.vue'),
