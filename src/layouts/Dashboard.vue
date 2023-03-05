@@ -17,6 +17,8 @@ import Sidebar from "@/components/Dashboard/Sidebar.vue";
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import { mapState, } from 'pinia';
+import { useUserStore } from '@/store/UserStore';
 
 export default defineComponent({
     name: 'Dashboard',
@@ -25,8 +27,11 @@ export default defineComponent({
             isPageRendered : false
         }
     },
+    computed: {
+        ...mapState(useUserStore, ["getUser"]),
+    },
     created() {
-        if (this.authRole.role !== 'admin') {
+        if (this.getUser.role !== 'admin') {
             this.$router.push('/')
         }else{
             this.isPageRendered = true

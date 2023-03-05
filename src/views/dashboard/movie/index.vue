@@ -130,8 +130,6 @@ export default defineComponent({
     methods: {
         async fetchMovieData() {
             await movieHelper.getMovies().then((resp: any) => {
-                console.log(resp.movies);
-
                 this.movies = resp.movies
             })
         },

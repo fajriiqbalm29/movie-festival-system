@@ -52,6 +52,8 @@
 
 <script lang="ts">
 import { login } from "@/helper/API/user"
+import {mapActions } from 'pinia';
+import { useUserStore } from "@/store/userStore"
 export default ({
     data(){
         return {
@@ -62,17 +64,14 @@ export default ({
             isSubmitted : false
         }
     },
+    computed:{
+
+    },
     methods:{
+        ...mapActions(useUserStore, ["login"]),
          async signin() {
             this.isSubmitted = true
-            await login(this.formLogin).then((resp: Model.User.LoginData)=>{
-                 localStorage.setItem('user_session', JSON.stringify(resp));
-                localStorage.setItem('access_token', resp.access_token);
-                if(resp.role === 'admin'){
-                    this.$router.push('/admin/dashboard')
-                }else{
-                    this.$router.push('/')
-                }
+            await this.login(this.formLogin).then((resp: Model.User.LoginData)=>{
             }).catch((err: Error)=>{
                 console.log(err.message);
             }).finally(()=> this.isSubmitted = false)

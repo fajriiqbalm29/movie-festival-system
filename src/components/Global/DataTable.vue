@@ -11,7 +11,6 @@
                                         class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         {{ header.text }}
                                     </th>
-                                     <th v-if="actionsHeader">{{ actionsHeader }}</th>
                                 </template>
                             </tr>
                         </thead>
@@ -20,11 +19,6 @@
                                 <template v-for="(value, key) in item">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm text-gray-900" v-if="key !== 'id'">{{ value }}</div>
-                                    </td>
-                                    <td v-if="actionsHeader">
-                                        <button v-for="(action, index) in actions" :key="index" @click="action.handler(item)">
-                                        {{ action.label }}
-                                        </button>
                                     </td>
                                 </template>
                             </tr>
@@ -76,14 +70,6 @@ export default defineComponent({
         itemsPerPage: {
             type: Number,
             default: 10,
-        },
-        actionsHeader: {
-            type: String,
-            default: '',
-        },
-        actions: {
-            type: Array,
-            default: () => [],
         },
     },
     setup(props) {

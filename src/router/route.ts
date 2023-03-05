@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw  } from 'vue-router'
-
+import {useUserStore} from "@/store/userStore"
 const routes:Array<RouteRecordRaw>  = [
     {
         path: '/',
@@ -44,8 +44,10 @@ const router = createRouter({
 })
 
 
+
 router.beforeEach((to, from, next) => {
-  const loggedIn = localStorage.getItem('access_token') ? true : false
+  const store = useUserStore()
+  const loggedIn = store.getUser ? true : false
 
   if (to.matched.some(record => !record.meta.isPublic)) {
     if (!loggedIn) {

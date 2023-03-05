@@ -120,8 +120,6 @@ export default ({
       this.shown_movie_list = []
       await movieHelper.getMovies().then((resp: any) => {
         this.movie_list = resp.movies;
-        console.log(this.movie_list);
-        
         this.totalMovie = resp.movies.length
       })
     }
