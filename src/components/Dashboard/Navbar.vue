@@ -14,7 +14,7 @@
                     id="dropdown-target">
                     <a href="#!" class="transition-all hover:bg-sky-100 p-4">Dashboard</a>
                     <a href="#!" class="transition-all hover:bg-sky-100 p-4">Settings</a>
-                    <a href="sign_in.html" class="transition-all hover:bg-sky-100 p-4">Sign Out</a>
+                    <a @click="logout" class="transition-all hover:bg-sky-100 p-4">Sign Out</a>
                 </div>
             </div>
         </div>
@@ -23,10 +23,19 @@
 </template>
 
 <script lang="ts">
-export default ({
+import { inject, defineComponent } from 'vue'
+
+export default defineComponent({
     data() {
         return {
             dropDownOpen: false
+        }
+    },
+    setup(){
+        const logout = inject('logout')
+
+        return {
+            logout
         }
     }
 })

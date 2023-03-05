@@ -8,6 +8,8 @@ declare namespace Model {
             artist: string,
             genre: string,
             url: string,
+            views: number,
+            votes: number
         }
     }
 }

@@ -4,22 +4,27 @@ const routes:Array<RouteRecordRaw>  = [
     {
         path: '/',
         meta: { title: 'Home', layout: 'default',isPublic : true },
-        component: () => import('../views/Home.vue'),
+        component: () => import('@/views/Home.vue'),
     },
     {
         path: '/login',
         meta: { title: 'Home', layout: 'blank', isPublic : true },
-        component: () => import('../views/Login.vue'),
+        component: () => import('@/views/Login.vue'),
     },
     {
         path: '/admin/dashboard',
-        meta: { title: 'Home', layout: 'dashboard', isPublic : false },
-        component: () => import('../views/dashboard/index.vue'),
+        meta: { title: 'Dashboard', layout: 'dashboard', isPublic : false },
+        component: () => import('@/views/dashboard/index.vue'),
+    },
+    {
+        path: '/admin/most-viewed',
+        meta: { title: 'Most Viewed', layout: 'dashboard', isPublic : false },
+        component: () => import('@/views/dashboard/movie/MostViewed.vue'),
     },
     {
         path: '/admin/movie',
         meta: { title: 'Home', layout: 'dashboard', isPublic : false },
-        component: () => import('../views/dashboard/movie/index.vue'),
+        component: () => import('@/views/dashboard/movie/index.vue'),
     },
 ]
 const router = createRouter({
