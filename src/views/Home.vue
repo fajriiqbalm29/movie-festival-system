@@ -9,7 +9,7 @@
               <span class="block">Original Movie.</span>
             </h1>
             <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit.
               <span class="block lg:mb-1"></span> Dolores quos deserunt voluptates enim eaque iusto fuga,
             </p>
             <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
@@ -56,78 +56,75 @@
   </div>
 
   <div class="container px-4 mx-auto my-16 md:px-12">
-    <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">New Items</h2>
+    <h2 class="mb-4 text-xl font-medium md:mb-0 md:text-lg">Movies</h2>
     <div class="flex flex-wrap -mx-1 lg:-mx-4">
-      <div class="w-full px-1 my-1 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+      <div v-if="totalMovie > 0" v-for="(item, index) in loadMoreMovie" :key="item" class="w-full px-1 my-1 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
         <div class="overflow-hidden border border-gray-200 rounded-xl">
-          <a href="details.html">
+          <router-link :to="`/movie/${movie_list[index].slug}`">
             <div class="m-4 overflow-hidden rounded-xl">
               <img alt="Placeholder" class="block w-full h-auto" src="@/assets/images/browse-1.png" />
             </div>
-          </a>
-
+          </router-link>
           <header class="px-4 mb-4 leading-tight">
             <h1 class="text-lg">
               <a class="font-semibold text-black no-underline hover:underline" href="#">
-                Mobile UI Kit
+                {{ movie_list[index].title }}
               </a>
             </h1>
-            <span class="block text-sm font-light text-gray-500 no-underline">
-              Mobile UI Kit
-            </span>
-          </header>
-        </div>
-      </div>
-      <div class="w-full px-1 my-1 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-        <div class="overflow-hidden border border-gray-200 rounded-xl">
-          <a href="details.html">
-            <div class="m-4 overflow-hidden rounded-xl">
-              <img alt="Placeholder" class="block w-full h-auto" src="@/assets/images/browse-2.png" />
+            <div class="grid grid-cols-2">
+              <span class="block text-sm font-light text-gray-500 no-underline">
+                {{ movie_list[index].genre }}
+              </span>
             </div>
-          </a>
-
-          <header class="px-4 mb-4 leading-tight">
-            <h1 class="text-lg">
-              <a class="font-semibold text-black no-underline hover:underline" href="#">
-                Online Doctor Consultation
-              </a>
-            </h1>
-            <span class="block text-sm font-light text-gray-500 no-underline">
-              Website UI Kit
-            </span>
           </header>
         </div>
       </div>
-      <div class="w-full px-1 my-1 md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
-        <div class="overflow-hidden border border-gray-200 rounded-xl">
-          <a href="details.html">
-            <div class="m-4 overflow-hidden rounded-xl">
-              <img alt="Placeholder" class="block w-full h-auto" src="@/assets/images/browse-3.png" />
-            </div>
-          </a>
-
-          <header class="px-4 mb-4 leading-tight">
-            <h1 class="text-lg">
-              <a class="font-semibold text-black no-underline hover:underline" href="#">
-                Banking Crypto
-              </a>
-            </h1>
-            <span class="block text-sm font-light text-gray-500 no-underline">
-              Mobile UI Kit
-            </span>
-          </header>
-        </div>
-      </div>
+    </div>
+    <div class="flex justify-center mt-14" data-aos="fade-up" data-aos-delay="400" v-if="movie_list.length > loadMoreMovie">
+      <button @click="loadMoreMovie += 5"
+        class="text-white w-40 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Load
+        More</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
+import * as movieHelper from "@/helper/API/movie"
+
 export default ({
   data() {
     return {
-      dropDownOpen: false
+      movie_list: [],
+      shown_movie_list: [],
+      loadMoreMovie: 5,
+      totalMovie: 0,
     }
   },
+  computed: {
+    movies() {
+      let movieList = this.movie_list;
+      movieList = movieList.splice(0, this.totalMovie);
+      this.shown_movie_list = this.shown_movie_list.concat(movieList)
+      return this.shown_movie_list;
+    }
+  },
+  mounted() {
+    this.fetchMovieData()
+  },
+  methods: {
+    loadMore() {
+      this.totalMovie = this.loadMoreMovie + this.movies.length;
+    },
+    async fetchMovieData() {
+      this.shown_movie_list = []
+      await movieHelper.getMovies().then((resp: any) => {
+        this.movie_list = resp.movies;
+        console.log(this.movie_list);
+        
+        this.totalMovie = resp.movies.length
+      })
+    }
+  }
 })
 </script>

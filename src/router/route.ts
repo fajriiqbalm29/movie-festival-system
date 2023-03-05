@@ -7,6 +7,11 @@ const routes:Array<RouteRecordRaw>  = [
         component: () => import('@/views/Home.vue'),
     },
     {
+        path: '/movie/:slug',
+        meta: { title: 'Detail', layout: 'default',isPublic : true },
+        component: () => import('@/views/movie/DetailMovie.vue'),
+    },
+    {
         path: '/login',
         meta: { title: 'Home', layout: 'blank', isPublic : true },
         component: () => import('@/views/Login.vue'),
